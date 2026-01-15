@@ -11,8 +11,9 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "dotenv": "^17.2.3",
     "express": "^4.22.1",
-    "mongoose": "^6.5.3"
+    "mongoose": "^6.13.8"
   },
   "devDependencies": {
     "@babel/cli": "^7.18.10",
