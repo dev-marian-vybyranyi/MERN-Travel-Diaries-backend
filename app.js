@@ -1,13 +1,17 @@
+import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
-import userRouter from "./routing/user-routes.js";
+import postRouter from "./routing/post-routes";
+import userRouter from "./routing/user-routes";
 
 const app = express();
 dotenv.config();
 
+app.use(cors());
 app.use(express.json());
 app.use("/user", userRouter);
+app.use("/posts", postRouter);
 
 mongoose
   .connect(

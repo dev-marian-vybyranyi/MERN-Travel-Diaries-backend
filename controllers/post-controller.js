@@ -1,4 +1,6 @@
-import Post from "../models/Post";
+import mongoose from "mongoose";
+import Post from "../models/Posts";
+import User from "../models/User";
 
 export const getAllPosts = async (req, res) => {
   let posts;
@@ -14,7 +16,6 @@ export const getAllPosts = async (req, res) => {
 
   return res.status(200).json({ posts });
 };
-
 export const addPost = async (req, res) => {
   const { title, description, location, date, image, user } = req.body;
 
@@ -86,4 +87,60 @@ export const getPostById = async (req, res) => {
     return res.status(404).json({ message: "No post found" });
   }
   return res.status(200).json({ post });
+};
+
+export const updatePost = async (req, res) => {
+  const id = req.params.id;
+  const { title, description, location, image } = req.body;
+
+  if (
+    !title &&
+    title.trim() === "" &&
+    !description &&
+    description.trim() === "" &&
+    !location &&
+    location.trim() === "" &&
+    !image &&
+    image.trim() === ""
+  ) {
+    return res.status(422).json({ message: "Invalid Data" });
+  }
+
+  let post;
+  try {
+    post = await Post.findByIdAndUpdate(id, {
+      title,
+      description,
+      image,
+      location,
+    });
+  } catch (err) {
+    return console.log(err);
+  }
+
+  if (!post) {
+    return res.status(500).json({ message: "Unable to update" });
+  }
+  return res.status(200).json({ message: "Updated Successfully" });
+};
+
+export const deletePost = async (req, res) => {
+  const id = req.params.id;
+  let post;
+  try {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    post = await Post.findById(id).populate("user");
+    post.user.posts.pull(post);
+    await post.user.save({ session });
+    post = await Post.findByIdAndRemove(id);
+    session.commitTransaction();
+  } catch (err) {
+    return console.log(err);
+  }
+  if (!post) {
+    return res.status(500).json({ message: "Unable to delete" });
+  }
+
+  return res.status(200).json({ message: "Deleted Successfully" });
 };
