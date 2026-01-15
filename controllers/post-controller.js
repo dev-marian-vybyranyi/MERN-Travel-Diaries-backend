@@ -71,3 +71,19 @@ export const addPost = async (req, res) => {
   }
   return res.status(201).json({ post });
 };
+
+export const getPostById = async (req, res) => {
+  const id = req.params.id;
+
+  let post;
+
+  try {
+    post = await Post.findById(id);
+  } catch (err) {
+    return console.log(err);
+  }
+  if (!post) {
+    return res.status(404).json({ message: "No post found" });
+  }
+  return res.status(200).json({ post });
+};
