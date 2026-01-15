@@ -1,9 +1,9 @@
 import { Router } from "express";
 import {
-    getAllUsers,
-    getUserById,
-    login,
-    signup,
+  getAllUsers,
+  getUserById,
+  login,
+  signup,
 } from "../controllers/user-controllers";
 
 const userRouter = Router();

@@ -1,10 +1,10 @@
 import { Router } from "express";
 import {
-    addPost,
-    deletePost,
-    getAllPosts,
-    getPostById,
-    updatePost,
+  addPost,
+  deletePost,
+  getAllPosts,
+  getPostById,
+  updatePost,
 } from "../controllers/post-controller";
 
 const postRouter = Router();
